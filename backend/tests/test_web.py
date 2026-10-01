@@ -42,6 +42,13 @@ def test_frontend_and_health(client):
     assert client.get("/api/health").json()["status"] == "ok"
     cfg = client.get("/api/config").json()
     assert cfg["ai_enabled"] is False and cfg["password_required"] is False and cfg["product"] == "Osamu Dazai"
+    assert cfg["creator"] == {"name": "TechRen Academy", "url": "https://www.techrenacademy.com"}
+
+
+def test_creator_credit_links_out_safely(client):
+    html = " ".join(client.get("/").text.split())  # ignore line wrapping
+    assert html.count('href="https://www.techrenacademy.com" target="_blank" rel="noopener noreferrer"') == 2
+    assert html.count(">TechRen Academy</a>") == 2 and "Created by <a" in html
 
 
 def test_validate_broken_and_clean(client):

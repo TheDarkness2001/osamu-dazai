@@ -1,5 +1,7 @@
 # Osamu Dazai — educational publishing engine
 
+Created by [TechRen Academy](https://www.techrenacademy.com).
+
 Osamu Dazai turns a teaching idea into a complete, checked educational product: curriculum, learning graph,
 student book, teacher's guide, visuals, assessments and IELTS materials. AI drafts the content; deterministic
 checks verify every step, and drafts that fail are sent back — never published.

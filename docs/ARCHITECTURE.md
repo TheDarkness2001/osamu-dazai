@@ -10,7 +10,7 @@ Companion documents: `REPOSITORY_AUDIT.md`, `../THIRD_PARTY_NOTICES.md`
 
 - **Product name:** **Osamu Dazai** (repository `osamu-dazai`, Python package `osamu_dazai`). The tagline is "Educational publishing engine".
 - The name lives in exactly one place (`osamu_dazai/branding.py`). Display text elsewhere reads it from there or from `/api/config`.
-- Osamu Dazai is an independent product. It is **not** TechRen, REN AI or any REN-branded product, and it shares no code, database, branding or identity with them.
+- Osamu Dazai is created by **TechRen Academy** (credited on the website and README, linking to www.techrenacademy.com). It is its own product with its own name and codebase: it is **not** the TechRen platform, REN AI or any REN-branded product, and it shares no code or database with them.
 - TechRen appears only as an optional **exporter plugin** (§14), loaded through a plugin entry point. The core never imports it.
 
 ---

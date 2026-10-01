@@ -28,7 +28,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from osamu_dazai import __version__
-from osamu_dazai.branding import PRODUCT_NAME, PRODUCT_TAGLINE
+from osamu_dazai.branding import CREATOR_NAME, CREATOR_URL, PRODUCT_NAME, PRODUCT_TAGLINE
 from osamu_dazai.domain.validation import ValidationIssue, ValidationResult
 from osamu_dazai.ielts import contract as C
 from osamu_dazai.ielts.docx_io import read_docx
@@ -135,6 +135,7 @@ def health() -> dict:
 @app.get("/api/config")
 def config() -> dict:
     return {"product": PRODUCT_NAME, "tagline": PRODUCT_TAGLINE, "version": __version__,
+            "creator": {"name": CREATOR_NAME, "url": CREATOR_URL},
             "ai_enabled": bool(os.environ.get("ANTHROPIC_API_KEY")),
             "password_required": bool(os.environ.get("DAZAI_SITE_PASSWORD")),
             "max_upload_mb": MAX_BYTES // (1024 * 1024)}
