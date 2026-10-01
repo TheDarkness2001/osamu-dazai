@@ -1,0 +1,34 @@
+# Downloaded third-party reference repositories — NOT part of Osamu Dazai.
+# Several are licensed CC BY-NC(-SA/-ND) or GPL-3.0; they must never be committed.
+CurricuLLM-main/
+Study-AI-Agent-main/
+classbuild-main/
+curriculum-main/
+ibook-skills-main/
+intelligent-textbooks-main/
+reference/
+
+# Local tooling / machine-specific config
+.claude/
+.vscode/
+.idea/
+*.code-workspace
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+
+# Secrets and local config
+.env
+.env.*
+backend/config/providers.toml
+
+# Generated course output
+course/
+out/
+*.tmp

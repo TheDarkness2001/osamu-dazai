@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Osamu Dazai — Educational Publishing Engine</title>
+  <meta name="description" content="Validate and repair IELTS Reading and Listening Word documents so fixed-rule parsers can import them.">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/">
+      <img src="/static/favicon.svg" alt="" width="28" height="28">
+      <span><strong>Osamu Dazai</strong><small>Educational publishing engine</small></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav id="nav" aria-label="Main">
+      <a href="#/" data-route="/">Dashboard</a>
+      <a href="#/validate" data-route="/validate">Validate IELTS document</a>
+      <a href="#/repair" data-route="/repair">Fix IELTS document</a>
+      <a href="#/generate" data-route="/generate">Generators</a>
+      <a href="#/about" data-route="/about">About</a>
+    </nav>
+  </header>
+
+  <main id="app" tabindex="-1">
+    <!-- Dashboard -->
+    <section data-page="/" hidden>
+      <div class="hero">
+        <h1>Educational material that parsers can trust</h1>
+        <p class="lead">Osamu Dazai plans curricula, writes textbooks and teacher guides, and builds assessments — with
+          deterministic checks at every step. Start with the IELTS tools below: they need no AI and no account.</p>
+      </div>
+      <div class="cards">
+        <a class="card" href="#/validate">
+          <h2>Validate an IELTS document</h2>
+          <p>Upload a Reading or Listening Word file. Every passage header, question number, range and answer is checked
+            against the import contract, with the exact location and a suggested fix.</p>
+          <span class="cta">Open validator →</span>
+        </a>
+        <a class="card" href="#/repair">
+          <h2>Fix an IELTS document</h2>
+          <p>Repairs glued question numbers ("…energy 13 The author…"), Word auto-numbering, soft line breaks and glued
+            headers — without changing a single word — and gives you a corrected .docx.</p>
+          <span class="cta">Open Format Repair →</span>
+        </a>
+        <a class="card muted-card" href="#/generate">
+          <h2>Generate courses &amp; tests</h2>
+          <p>Curriculum, learning graph, student book, teacher guide, visuals, assessments, IELTS Reading/Listening/
+            Writing/Speaking. <span id="ai-status-inline">Requires an AI key on the server.</span></p>
+          <span class="cta">See generators →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Validate -->
+    <section data-page="/validate" hidden>
+      <h1>IELTS Document Validator</h1>
+      <p class="lead">Checks the document exactly the way a fixed-rule importer reads it. Nothing is changed and nothing
+        is stored.</p>
+      <form class="tool" id="validate-form">
+        <div class="field">
+          <label for="v-file">Word (.docx) or text (.txt, .md) file</label>
+          <input id="v-file" name="file" type="file" accept=".docx,.txt,.md" required>
+        </div>
+        <fieldset class="field">
+          <legend>Paper type</legend>
+          <label class="radio"><input type="radio" name="kind" value="reading" checked> Reading (PASSAGE N)</label>
+          <label class="radio"><input type="radio" name="kind" value="listening"> Listening (PART N)</label>
+        </fieldset>
+        <div class="actions">
+          <button type="submit" class="primary">Validate</button>
+          <button type="button" class="secondary" data-sample="broken_reading.docx" data-target="validate">Try a broken sample</button>
+          <button type="button" class="secondary" data-sample="clean_reading.docx" data-target="validate">Try a clean sample</button>
+        </div>
+      </form>
+      <div id="validate-result" class="result" aria-live="polite"></div>
+    </section>
+
+    <!-- Repair -->
+    <section data-page="/repair" hidden>
+      <h1>IELTS Format Repair</h1>
+      <p class="lead">Fixes structure only. Wording is never changed: if a fix would need a wording change, or the right
+        place for a line break is uncertain, it is flagged for you instead.</p>
+      <form class="tool" id="repair-form">
+        <div class="field">
+          <label for="r-file">Word (.docx) or text (.txt, .md) file</label>
+          <input id="r-file" name="file" type="file" accept=".docx,.txt,.md" required>
+        </div>
+        <fieldset class="field">
+          <legend>Paper type</legend>
+          <label class="radio"><input type="radio" name="kind" value="reading" checked> Reading (PASSAGE N)</label>
+          <label class="radio"><input type="radio" name="kind" value="listening"> Listening (PART N)</label>
+        </fieldset>
+        <div class="field">
+          <label for="r-threshold">Confidence needed to apply a fix: <output id="r-threshold-out">0.80</output></label>
+          <input id="r-threshold" name="threshold" type="range" min="0.6" max="0.95" step="0.05" value="0.8">
+          <small>Higher = fewer automatic fixes, more items left for review.</small>
+        </div>
+        <div class="actions">
+          <button type="submit" class="primary">Repair</button>
+          <button type="button" class="secondary" data-sample="broken_reading.docx" data-target="repair">Try a broken sample</button>
+        </div>
+      </form>
+      <div id="repair-result" class="result" aria-live="polite"></div>
+    </section>
+
+    <!-- Generators -->
+    <section data-page="/generate" hidden>
+      <h1>Generators</h1>
+      <div class="notice" id="ai-notice"></div>
+      <p>The generation engine is built and tested: educational planner, curriculum &amp; learning graph, student book
+        with terminology enforcement, teacher guide, visuals (SVG diagrams &amp; charts), assessments with balanced
+        versions, and IELTS Reading, Listening, Writing and Speaking. Each AI step is followed by deterministic checks;
+        drafts that fail are sent back and never used.</p>
+      <p>On this website these tools appear once the site owner adds an AI provider key in the hosting settings.
+        Until then they can be run from the command line — see the project README.</p>
+    </section>
+
+    <!-- About -->
+    <section data-page="/about" hidden>
+      <h1>About Osamu Dazai</h1>
+      <p><strong>Osamu Dazai</strong> is an independent educational publishing engine. It is not
+        affiliated with any other product or organisation.</p>
+      <h2>Privacy</h2>
+      <p>Uploaded files are processed in memory to produce the report and corrected document, then discarded. Nothing is
+        stored on the server.</p>
+      <h2>Third-party software</h2>
+      <p>Parts of the academic source verification and quiz versioning are ported from ClassBuild (MIT, © 2026
+        Jason Tangen). Full notices are in the project’s THIRD_PARTY_NOTICES.md.</p>
+      <p class="muted" id="version-line"></p>
+    </section>
+  </main>
+
+  <footer class="footer"><span>Osamu Dazai</span><span class="muted">Files are processed in memory and never stored.</span></footer>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

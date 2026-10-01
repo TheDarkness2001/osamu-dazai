@@ -1,0 +1,20 @@
+# Render blueprint — free web service for the Osamu Dazai website.
+# Deploy: https://render.com/deploy?repo=https://github.com/TheDarkness2001/osamu-dazai
+services:
+  - type: web
+    name: osamu-dazai
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install ".[web]"
+    startCommand: uvicorn osamu_dazai.web.app:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DAZAI_MAX_UPLOAD_MB
+        value: "5"
+      # Optional, set in the Render dashboard (never commit secrets):
+      # DAZAI_SITE_PASSWORD — require a password for the tools
+      # ANTHROPIC_API_KEY    — enable AI generators (set a site password first)

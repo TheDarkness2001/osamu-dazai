@@ -1,0 +1,23 @@
+Repairs applied: 4
+Flags for review: 0
+Text preserved: yes
+  [split 0.90] line 43: question 13 glued to previous text
+  [split 0.95] line 63: question 16 glued to previous text
+  [split 0.90] line 114: question 27 glued to previous text
+  [split 0.90] line 148: answer 10 glued to previous answer
+Validation: PASSED
+
+Detected question groups:
+  P1 Questions 1-5: matching_headings
+  P1 Questions 6-7: multiple_choice_multi
+  P1 Questions 8-13: true_false_not_given
+  P2 Questions 14-17: multiple_choice
+  P2 Questions 18-21: matching_information
+  P2 Questions 22-24: matching_features
+  P2 Questions 25-26: completion/sentence
+  P3 Questions 27-31: yes_no_not_given
+  P3 Questions 32-35: completion/summary
+  P3 Questions 36-38: matching_sentence_endings
+  P3 Questions 39-40: short_answer
+
+Exported → ..\samples\ielts\03_fixed_test.docx

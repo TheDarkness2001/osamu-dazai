@@ -1,0 +1,41 @@
+ERROR [ielts.question.glued]
+Location: Passage 1, Group Questions 8-13, Question 13, Line 43, Paragraph 42
+Problem: Question 13 does not start its own line — it is glued to the previous text
+Excerpt: … a small amount of magnetic energy 13 The Haarlem auction was attended…
+Expected structure: 13. … on a new line
+Suggested correction: Insert a line break before '13' (character 59 of line 43)
+
+ERROR [ielts.question.glued]
+Location: Passage 2, Group Questions 14-17, Question 16, Line 62, Paragraph 61
+Problem: Question 16 does not start its own line — it is glued to the previous text
+Excerpt: D. Bees travel further in cities. 16. What does Professor Haidari say …
+Expected structure: 16. … on a new line
+Suggested correction: Insert a line break before '16' (character 35 of line 62)
+
+ERROR [ielts.question.glued]
+Location: Passage 3, Group Questions 27-31, Question 27, Line 112, Paragraph 111
+Problem: Question 27 does not start its own line — it is glued to the previous text
+Excerpt: … what the writer thinks about this 27. Schools have been too slow to r…
+Expected structure: 27. … on a new line
+Suggested correction: Insert a line break before '27' (character 72 of line 112)
+
+ERROR [ielts.answer_key.glued]
+Location: Question 10, Line 145, Paragraph 144
+Problem: Answer 10 is on the same line as answer 9
+Excerpt: 9. TRUE 10. NOT GIVEN
+Expected structure: one answer per line
+Suggested correction: Insert a line break before '10'
+
+ERROR [ielts.answer_key.answer_invalid]
+Location: Passage 1, Group Questions 8-13, Question 9, Line 145, Paragraph 144
+Problem: Answer for 9 is ['TRUE 10. NOT GIVEN'], not a valid FALSE / NOT GIVEN / TRUE
+Excerpt: 9. TRUE 10. NOT GIVEN
+Expected structure: one of: FALSE, NOT GIVEN, TRUE
+
+ERROR [ielts.answer_key.answer_missing]
+Location: Passage 1, Group Questions 8-13, Question 10, Line 137, Paragraph 136
+Problem: No answer for question 10
+Excerpt: ANSWER KEY
+Expected structure: 10. <answer>
+
+FAILED: 6 error(s), 0 warning(s)

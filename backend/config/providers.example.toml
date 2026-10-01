@@ -1,0 +1,34 @@
+# Osamu Dazai provider configuration. Copy to providers.toml and adjust.
+# Secrets never go in this file: Claude reads ANTHROPIC_API_KEY (or an
+# `ant auth login` profile); cloud images read DAZAI_IMAGE_API_KEY.
+
+default_llm = "claude"
+
+[llm.claude]
+kind = "anthropic"
+model = "claude-opus-5-5"
+effort = "high"            # content generation; lower per stage below
+refusal_fallbacks = true   # server-side fallbacks="default" on a policy decline
+
+[llm.ollama]
+kind = "local"
+base_url = "http://localhost:11434/v1"   # Ollama / llama.cpp / LM Studio / vLLM
+model = "qwen2.5:14b"
+
+[stage_routes.glossary]
+provider = "claude"
+effort = "low"
+
+[stage_routes.terminology_check]
+provider = "ollama"          # cheap, offline-capable checks can run locally
+
+[image]
+kind = "mock"                # "cloud" (images API) | "local" (SD WebUI) | "mock"
+# model = "gpt-image-1"
+# base_url = "http://127.0.0.1:7860"
+
+[research]
+kind = "web"                 # Crossref + Semantic Scholar; "local" = your own files
+claude_web_search = false    # true: add Claude's web_search tool for general web sources
+# contact_email = "you@example.com"   # enables Unpaywall open-access links
+# local_paths = ["references/syllabus.docx"]
