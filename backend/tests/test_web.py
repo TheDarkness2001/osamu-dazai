@@ -38,7 +38,9 @@ def test_frontend_and_health(client):
     assert r.status_code == 200 and "<title>Osamu Dazai" in r.text
     assert "script-src 'self'" in r.headers["content-security-policy"]
     assert r.headers["x-content-type-options"] == "nosniff"
-    assert client.get("/static/app.js").status_code == 200
+    for asset in ("js/app.js", "js/i18n.js", "css/tokens.css", "icons.svg", "locales/uz.json",
+                  "fonts/inter-latin-wght-normal.woff2"):
+        assert client.get(f"/static/{asset}").status_code == 200, asset
     assert client.get("/api/health").json()["status"] == "ok"
     cfg = client.get("/api/config").json()
     assert cfg["ai_enabled"] is False and cfg["password_required"] is False and cfg["product"] == "Osamu Dazai"
@@ -48,7 +50,8 @@ def test_frontend_and_health(client):
 def test_creator_credit_links_out_safely(client):
     html = " ".join(client.get("/").text.split())  # ignore line wrapping
     assert html.count('href="https://www.techrenacademy.com" target="_blank" rel="noopener noreferrer"') == 2
-    assert html.count(">TechRen Academy</a>") == 2 and "Created by <a" in html
+    assert html.count(">TechRen Academy</a>") == 2
+    assert html.count('data-i18n="footer.credit">Created by</span> <a') == 1
 
 
 def test_validate_broken_and_clean(client):
@@ -120,3 +123,43 @@ def test_samples(client):
     r = client.get("/api/samples/broken_reading.docx")
     assert r.status_code == 200 and r.content.startswith(b"PK")
     assert client.get("/api/samples/..%2F..%2Fapp.py").status_code in (404, 422)
+
+
+# ---- frontend translations --------------------------------------------------------------
+def _flat(d: dict, prefix: str = "") -> dict:
+    out = {}
+    for k, v in d.items():
+        out.update(_flat(v, f"{prefix}{k}.") if isinstance(v, dict) else {f"{prefix}{k}": v})
+    return out
+
+
+def test_locales_are_complete_and_consistent():
+    import json
+    import re
+
+    locales = {n: _flat(json.loads((STATIC / "locales" / f"{n}.json").read_text(encoding="utf-8")))
+               for n in ("en", "uz", "ru")}
+    en = locales["en"]
+    for name in ("uz", "ru"):
+        assert set(locales[name]) == set(en), name
+        for key, text in en.items():
+            assert set(re.findall(r"\{\w+\}", text)) == set(re.findall(r"\{\w+\}", locales[name][key])), (name, key)
+            assert locales[name][key].strip(), (name, key)
+
+
+def test_every_i18n_key_in_markup_and_scripts_exists():
+    import json
+    import re
+
+    en = _flat(json.loads((STATIC / "locales" / "en.json").read_text(encoding="utf-8")))
+    html = (STATIC / "index.html").read_text(encoding="utf-8")
+    keys = set(re.findall(r'data-i18n="([\w.]+)"', html))
+    keys |= {k for pair in re.findall(r'data-i18n-attr="([^"]+)"', html) for k in re.findall(r":([\w.]+)", pair)}
+    for js in (STATIC / "js").glob("*.js"):
+        src = js.read_text(encoding="utf-8")
+        keys |= set(re.findall(r'\bt\("(\w+\.[\w.]+)"', src))  # real keys always have a namespace
+        keys |= {k for k in re.findall(r'"([a-z]+\.[A-Za-z0-9_]+)"', src) if k.split(".")[0] in
+                 {"nav", "dash", "upload", "doctype", "validate", "result", "repair", "gen", "about", "footer", "err",
+                  "greeting", "brand"}}
+    missing = sorted(k for k in keys if k not in en)
+    assert missing == []

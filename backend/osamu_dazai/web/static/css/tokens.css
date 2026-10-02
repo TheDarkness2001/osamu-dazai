@@ -1,0 +1,114 @@
+/* Design tokens. Every colour, font, size and radius used by the app comes from here.
+   Light ("paper") is the default; dark ("charcoal") follows the OS, and either can be
+   forced with <html data-theme="light|dark">. */
+
+:root {
+  /* type */
+  --font-ui: "Inter Variable", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", "Iowan Old Style", "Charter", Georgia, serif;
+  --font-mono: "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+
+  --fs-display: clamp(2.5rem, 2rem + 2.4vw, 3.75rem);
+  --fs-h1: clamp(1.85rem, 1.55rem + 1.2vw, 2.5rem);
+  --fs-h2: clamp(1.3rem, 1.2rem + .45vw, 1.6rem);
+  --fs-h3: 1.0625rem;
+  --fs-body: 1rem;
+  --fs-secondary: .9375rem;
+  --fs-caption: .8125rem;
+  --fs-meta: .75rem;
+  --lh-tight: 1.15;
+  --lh-body: 1.6;
+  --tracking-label: .09em;
+
+  /* space (4px grid) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px;
+  --s-10: 40px; --s-12: 48px; --s-16: 64px; --s-20: 80px;
+  --gutter: clamp(16px, 3.2vw, 40px);
+  --content-max: 1180px;
+  --measure: 68ch;
+
+  /* shape */
+  --r-sm: 3px; --r-md: 6px; --r-lg: 10px; --r-pill: 999px;
+  --bar-h: 64px;
+
+  /* motion */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --t-fast: 120ms; --t-med: 220ms;
+
+  /* colour — paper */
+  --background: #f4f1ea;
+  --surface: #fbfaf6;
+  --surface-muted: #eeeae1;
+  --surface-sunken: #e9e4d9;
+  --border: #ddd6c9;
+  --border-strong: #c4bba9;
+  --text-primary: #1c1e22;
+  --text-secondary: #474c54;
+  --text-muted: #72767d;
+
+  --ink: #1d2533;            /* navigation / colophon */
+  --ink-raised: #263043;
+  --ink-text: #ece7dc;
+  --ink-muted: #a3abb9;
+  --ink-border: #34405a;
+
+  --accent: #1f5e56;         /* aotake — deep green-teal */
+  --accent-hover: #164a43;
+  --accent-soft: #dfeae6;
+  --accent-contrast: #ffffff;
+  --accent-on-ink: #8cc9bc;
+  --seal: #b4472d;           /* brand mark only */
+
+  --success: #2e6a45; --success-soft: #e2ede5;
+  --warning: #8a5d0e; --warning-soft: #f4e9d3;
+  --error: #a3352b;   --error-soft: #f5e1dd;
+
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+  --shadow-1: 0 1px 0 rgba(28, 30, 34, .03), 0 1px 2px rgba(28, 30, 34, .06);
+  --shadow-2: 0 1px 2px rgba(28, 30, 34, .05), 0 8px 24px -12px rgba(28, 30, 34, .18);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #15171a;
+    --surface: #1c1f23;
+    --surface-muted: #23272c;
+    --surface-sunken: #121417;
+    --border: #2e3339;
+    --border-strong: #434a52;
+    --text-primary: #ece6da;
+    --text-secondary: #c2bbae;
+    --text-muted: #8f897f;
+    --ink: #0f1114;
+    --ink-raised: #1a1d22;
+    --ink-text: #ece6da;
+    --ink-muted: #8f97a3;
+    --ink-border: #262b33;
+    --accent: #84c2b5;
+    --accent-hover: #9fd2c6;
+    --accent-soft: #1d2f2b;
+    --accent-contrast: #0e1513;
+    --accent-on-ink: #84c2b5;
+    --seal: #c9583d;
+    --success: #7cc79a; --success-soft: #18291f;
+    --warning: #e2b765; --warning-soft: #2b2415;
+    --error: #ec8f82;   --error-soft: #2e1a17;
+    --shadow-1: none;
+    --shadow-2: 0 10px 30px -14px rgba(0, 0, 0, .6);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --background: #15171a; --surface: #1c1f23; --surface-muted: #23272c; --surface-sunken: #121417;
+  --border: #2e3339; --border-strong: #434a52;
+  --text-primary: #ece6da; --text-secondary: #c2bbae; --text-muted: #8f897f;
+  --ink: #0f1114; --ink-raised: #1a1d22; --ink-text: #ece6da; --ink-muted: #8f97a3; --ink-border: #262b33;
+  --accent: #84c2b5; --accent-hover: #9fd2c6; --accent-soft: #1d2f2b; --accent-contrast: #0e1513;
+  --accent-on-ink: #84c2b5; --seal: #c9583d;
+  --success: #7cc79a; --success-soft: #18291f; --warning: #e2b765; --warning-soft: #2b2415;
+  --error: #ec8f82; --error-soft: #2e1a17;
+  --shadow-1: none; --shadow-2: 0 10px 30px -14px rgba(0, 0, 0, .6);
+  color-scheme: dark;
+}

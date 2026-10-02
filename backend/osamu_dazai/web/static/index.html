@@ -4,137 +4,336 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Osamu Dazai — Educational Publishing Engine</title>
-  <meta name="description" content="Validate and repair IELTS Reading and Listening Word documents so fixed-rule parsers can import them.">
+  <meta name="description" content="Validate and repair IELTS Reading and Listening Word documents so fixed-rule importers can read them.">
+  <meta name="theme-color" content="#1d2533">
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="preload" href="/static/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/source-serif-4-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/static/css/fonts.css">
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/pages.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#/">
-      <img src="/static/favicon.svg" alt="" width="28" height="28">
-      <span><strong>Osamu Dazai</strong><small>Educational publishing engine</small></span>
-    </a>
-    <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
-    <nav id="nav" aria-label="Main">
-      <a href="#/" data-route="/">Dashboard</a>
-      <a href="#/validate" data-route="/validate">Validate IELTS document</a>
-      <a href="#/repair" data-route="/repair">Fix IELTS document</a>
-      <a href="#/generate" data-route="/generate">Generators</a>
-      <a href="#/about" data-route="/about">About</a>
-    </nav>
+  <a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+
+  <!-- ===================== Navbar ===================== -->
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a class="brand" href="#/" aria-label="Osamu Dazai — Workspace">
+        <img class="brand__mark" src="/static/favicon.svg" alt="" width="30" height="30">
+        <span class="brand__text">
+          <span class="brand__name">Osamu Dazai</span>
+          <span class="brand__tagline" data-i18n="brand.tagline">Educational Publishing Engine</span>
+        </span>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-panel">
+        <svg class="icon icon-open" aria-hidden="true"><use href="/static/icons.svg#i-menu"/></svg>
+        <svg class="icon icon-close" aria-hidden="true"><use href="/static/icons.svg#i-x"/></svg>
+        <span data-i18n="nav.menu">Menu</span>
+      </button>
+
+      <div class="nav-panel" id="nav-panel">
+        <nav class="nav-primary" data-i18n-attr="aria-label:nav.main" aria-label="Main navigation">
+          <a class="nav-link" href="#/" data-route="/" data-i18n="nav.workspace">Workspace</a>
+          <a class="nav-link" href="#/validate" data-route="/validate" data-i18n="nav.validate">Validate</a>
+          <a class="nav-link" href="#/repair" data-route="/repair" data-i18n="nav.repair">Repair</a>
+          <a class="nav-link" href="#/generate" data-route="/generate" data-i18n="nav.generators">Generators</a>
+        </nav>
+        <div class="nav-secondary">
+          <fieldset class="lang" id="lang-selector">
+            <legend class="visually-hidden" data-i18n="nav.language">Interface language</legend>
+            <label class="lang__option"><input type="radio" name="lang" value="en" checked><span lang="en" title="English">EN</span></label>
+            <label class="lang__option"><input type="radio" name="lang" value="uz"><span lang="uz" title="Oʻzbekcha">UZ</span></label>
+            <label class="lang__option"><input type="radio" name="lang" value="ru"><span lang="ru" title="Русский">RU</span></label>
+          </fieldset>
+          <a class="nav-link" href="#/about" data-route="/about" data-i18n="nav.about">About</a>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main id="app" tabindex="-1">
-    <!-- Dashboard -->
-    <section data-page="/" hidden>
+  <main id="main" tabindex="-1">
+
+    <!-- ===================== Workspace ===================== -->
+    <section class="page" data-page="/" aria-labelledby="dash-title" hidden>
       <div class="hero">
-        <h1>Educational material that parsers can trust</h1>
-        <p class="lead">Osamu Dazai plans curricula, writes textbooks and teacher guides, and builds assessments — with
-          deterministic checks at every step. Start with the IELTS tools below: they need no AI and no account.</p>
+        <div>
+          <div class="hero__kicker"><span class="seal" aria-hidden="true"></span><p class="t-label" id="greeting">Welcome</p></div>
+          <h1 class="t-display" id="dash-title">Osamu Dazai</h1>
+          <p class="hero__tagline" data-i18n="brand.tagline">Educational Publishing Engine</p>
+          <p class="t-lead" data-i18n="dash.lead">Plan, write, check and publish educational material — with every document verified against fixed rules before it leaves your desk.</p>
+        </div>
+        <dl class="colophon">
+          <div class="colophon__row"><dt data-i18n="dash.factContracts">Import contracts</dt><dd data-i18n="dash.factContractsValue">IELTS Reading · Listening</dd></div>
+          <div class="colophon__row"><dt data-i18n="dash.factChecks">Checks</dt><dd data-i18n="dash.factChecksValue">Deterministic, rule-based</dd></div>
+          <div class="colophon__row"><dt data-i18n="dash.factStorage">Files kept on server</dt><dd data-i18n="dash.factStorageValue">None</dd></div>
+        </dl>
       </div>
-      <div class="cards">
-        <a class="card" href="#/validate">
-          <h2>Validate an IELTS document</h2>
-          <p>Upload a Reading or Listening Word file. Every passage header, question number, range and answer is checked
-            against the import contract, with the exact location and a suggested fix.</p>
-          <span class="cta">Open validator →</span>
-        </a>
-        <a class="card" href="#/repair">
-          <h2>Fix an IELTS document</h2>
-          <p>Repairs glued question numbers ("…energy 13 The author…"), Word auto-numbering, soft line breaks and glued
-            headers — without changing a single word — and gives you a corrected .docx.</p>
-          <span class="cta">Open Format Repair →</span>
-        </a>
-        <a class="card muted-card" href="#/generate">
-          <h2>Generate courses &amp; tests</h2>
-          <p>Curriculum, learning graph, student book, teacher guide, visuals, assessments, IELTS Reading/Listening/
-            Writing/Speaking. <span id="ai-status-inline">Requires an AI key on the server.</span></p>
-          <span class="cta">See generators →</span>
-        </a>
+
+      <section class="workflow" aria-labelledby="workflow-label">
+        <div class="workflow__intro">
+          <h2 class="t-label" id="workflow-label" data-i18n="dash.workflowLabel">IELTS document workflow</h2>
+          <p data-i18n="dash.workflowIntro">Three stages, one document. Each stage hands a clean file to the next.</p>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step__top"><span class="step__num">01</span>
+              <span class="step__icon"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-file-search"/></svg></span></div>
+            <h3 data-i18n="dash.step1Title">Validate</h3>
+            <p data-i18n="dash.step1Desc">Check a document against the fixed import contract and see exactly where it breaks.</p>
+            <a class="link-arrow" href="#/validate"><span data-i18n="dash.step1Cta">Open validator</span>
+              <svg class="icon icon-sm" aria-hidden="true"><use href="/static/icons.svg#i-arrow-right"/></svg></a>
+          </li>
+          <li class="step">
+            <span class="step__connector" aria-hidden="true"><svg class="icon"><use href="/static/icons.svg#i-chevron-right"/></svg></span>
+            <div class="step__top"><span class="step__num">02</span>
+              <span class="step__icon"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-wrench"/></svg></span></div>
+            <h3 data-i18n="dash.step2Title">Repair</h3>
+            <p data-i18n="dash.step2Desc">Automatically repair safe structural problems — glued numbers, broken headers — without touching the wording.</p>
+            <a class="link-arrow" href="#/repair"><span data-i18n="dash.step2Cta">Open Format Repair</span>
+              <svg class="icon icon-sm" aria-hidden="true"><use href="/static/icons.svg#i-arrow-right"/></svg></a>
+          </li>
+          <li class="step">
+            <span class="step__connector" aria-hidden="true"><svg class="icon"><use href="/static/icons.svg#i-chevron-right"/></svg></span>
+            <div class="step__top"><span class="step__num">03</span>
+              <span class="step__icon"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-library"/></svg></span></div>
+            <h3 data-i18n="dash.step3Title">Generate</h3>
+            <p data-i18n="dash.step3Desc">Create courses, textbooks, teacher guides and IELTS materials from a structured plan.</p>
+            <a class="link-arrow" href="#/generate"><span data-i18n="dash.step3Cta">Browse generators</span>
+              <svg class="icon icon-sm" aria-hidden="true"><use href="/static/icons.svg#i-arrow-right"/></svg></a>
+          </li>
+        </ol>
+      </section>
+
+      <div class="dash-lower">
+        <section aria-labelledby="tools-label">
+          <h2 class="section-label t-label" id="tools-label" data-i18n="dash.toolsLabel">Tools</h2>
+          <ul class="tools">
+            <li><a class="tool" href="#/validate" data-tool="validate">
+              <span class="tool__icon"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-file-check"/></svg></span>
+              <span><span class="tool__title"><span data-i18n="dash.toolValidate">IELTS Document Validator</span></span>
+                <span class="tool__desc" data-i18n="dash.toolValidateDesc">Report every structural problem with its location and a suggested fix.</span></span>
+              <svg class="icon tool__chev" aria-hidden="true"><use href="/static/icons.svg#i-chevron-right"/></svg></a></li>
+            <li><a class="tool" href="#/repair" data-tool="repair">
+              <span class="tool__icon"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-wrench"/></svg></span>
+              <span><span class="tool__title"><span data-i18n="dash.toolRepair">Format Repair</span></span>
+                <span class="tool__desc" data-i18n="dash.toolRepairDesc">Fix structure only, then download a corrected .docx.</span></span>
+              <svg class="icon tool__chev" aria-hidden="true"><use href="/static/icons.svg#i-chevron-right"/></svg></a></li>
+            <li><a class="tool" href="#/generate" data-tool="generate">
+              <span class="tool__icon"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-layers"/></svg></span>
+              <span><span class="tool__title"><span data-i18n="dash.toolGenerators">Generators</span></span>
+                <span class="tool__desc" data-i18n="dash.toolGeneratorsDesc">Course design, assessment and content generators.</span></span>
+              <svg class="icon tool__chev" aria-hidden="true"><use href="/static/icons.svg#i-chevron-right"/></svg></a></li>
+          </ul>
+        </section>
+        <section aria-labelledby="principles-label">
+          <h2 class="section-label t-label" id="principles-label" data-i18n="dash.principlesLabel">Principles</h2>
+          <div class="principles">
+            <div class="principle"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-ruler"/></svg>
+              <h3 data-i18n="dash.p1Title">Deterministic</h3><p data-i18n="dash.p1Desc">The same document always produces the same result. Rules, not guesses.</p></div>
+            <div class="principle"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-shield-check"/></svg>
+              <h3 data-i18n="dash.p2Title">Private</h3><p data-i18n="dash.p2Desc">Documents are processed in memory and discarded as soon as the response is sent.</p></div>
+            <div class="principle"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-user-check"/></svg>
+              <h3 data-i18n="dash.p3Title">AI only where it helps</h3><p data-i18n="dash.p3Desc">Validation and repair use no AI at all. Generated drafts always pass human review.</p></div>
+            <div class="principle"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-hard-drive"/></svg>
+              <h3 data-i18n="dash.p4Title">No permanent storage</h3><p data-i18n="dash.p4Desc">No accounts, no file history, nothing to leak.</p></div>
+          </div>
+        </section>
       </div>
     </section>
 
-    <!-- Validate -->
-    <section data-page="/validate" hidden>
-      <h1>IELTS Document Validator</h1>
-      <p class="lead">Checks the document exactly the way a fixed-rule importer reads it. Nothing is changed and nothing
-        is stored.</p>
-      <form class="tool" id="validate-form">
-        <div class="field">
-          <label for="v-file">Word (.docx) or text (.txt, .md) file</label>
-          <input id="v-file" name="file" type="file" accept=".docx,.txt,.md" required>
-        </div>
-        <fieldset class="field">
-          <legend>Paper type</legend>
-          <label class="radio"><input type="radio" name="kind" value="reading" checked> Reading (PASSAGE N)</label>
-          <label class="radio"><input type="radio" name="kind" value="listening"> Listening (PART N)</label>
-        </fieldset>
-        <div class="actions">
-          <button type="submit" class="primary">Validate</button>
-          <button type="button" class="secondary" data-sample="broken_reading.docx" data-target="validate">Try a broken sample</button>
-          <button type="button" class="secondary" data-sample="clean_reading.docx" data-target="validate">Try a clean sample</button>
-        </div>
-      </form>
-      <div id="validate-result" class="result" aria-live="polite"></div>
+    <!-- ===================== Validate ===================== -->
+    <section class="page" data-page="/validate" aria-labelledby="validate-title" hidden>
+      <header class="page-header">
+        <p class="t-label" data-i18n="validate.eyebrow">IELTS · Document check</p>
+        <h1 id="validate-title" data-i18n="validate.title">IELTS Document Validator</h1>
+        <p class="t-lead" data-i18n="validate.lead">Checks a document exactly the way a fixed-rule importer reads it. Nothing is changed and nothing is stored.</p>
+      </header>
+      <div class="tool-layout">
+        <form class="tool-form" id="validate-form" novalidate>
+          <div class="field">
+            <span class="t-label" data-i18n="upload.fieldLabel">Document</span>
+            <div data-upload="validate"></div>
+          </div>
+          <fieldset class="field">
+            <legend class="field__legend t-label" data-i18n="doctype.label">Document type</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="kind" value="reading" checked>
+                <span class="segmented__dot" aria-hidden="true"></span><span class="segmented__title" data-i18n="doctype.reading">Reading</span>
+                <span class="segmented__hint" data-i18n="doctype.readingHint">Sections headed PASSAGE N</span></label>
+              <label class="segmented__option"><input type="radio" name="kind" value="listening">
+                <span class="segmented__dot" aria-hidden="true"></span><span class="segmented__title" data-i18n="doctype.listening">Listening</span>
+                <span class="segmented__hint" data-i18n="doctype.listeningHint">Sections headed PART N</span></label>
+            </div>
+          </fieldset>
+          <div class="tool-form__actions">
+            <button class="btn btn--primary" type="submit">
+              <svg class="icon btn__icon" aria-hidden="true"><use href="/static/icons.svg#i-scan-text"/></svg>
+              <svg class="icon spinner" aria-hidden="true"><use href="/static/icons.svg#i-loader-circle"/></svg>
+              <span data-label="validate.submit" data-busy="validate.working" data-i18n="validate.submit">Validate document</span>
+            </button>
+          </div>
+        </form>
+        <aside class="aside" aria-labelledby="checks-title">
+          <div class="aside__block">
+            <h2 id="checks-title" data-i18n="validate.checksTitle">What is checked</h2>
+            <ul class="checklist">
+              <li><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-check"/></svg><span data-i18n="validate.check1">Section headers stand alone on their own line</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-check"/></svg><span data-i18n="validate.check2">Every question number starts its own line</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-check"/></svg><span data-i18n="validate.check3">No missing, duplicated or out-of-order numbers</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-check"/></svg><span data-i18n="validate.check4">Question ranges match their contents</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-check"/></svg><span data-i18n="validate.check5">Heading lists use literal roman numerals</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-check"/></svg><span data-i18n="validate.check6">Answer key is complete and correctly placed</span></li>
+            </ul>
+          </div>
+          <div class="aside__note"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-lock"/></svg>
+            <p data-i18n="footer.privacy">Files are processed in memory and never stored.</p></div>
+        </aside>
+      </div>
+      <section class="results" id="validate-results" aria-live="polite" aria-labelledby="validate-results-label">
+        <h2 class="section-label t-label" id="validate-results-label" data-i18n="result.label">Validation result</h2>
+        <div data-results></div>
+      </section>
     </section>
 
-    <!-- Repair -->
-    <section data-page="/repair" hidden>
-      <h1>IELTS Format Repair</h1>
-      <p class="lead">Fixes structure only. Wording is never changed: if a fix would need a wording change, or the right
-        place for a line break is uncertain, it is flagged for you instead.</p>
-      <form class="tool" id="repair-form">
-        <div class="field">
-          <label for="r-file">Word (.docx) or text (.txt, .md) file</label>
-          <input id="r-file" name="file" type="file" accept=".docx,.txt,.md" required>
-        </div>
-        <fieldset class="field">
-          <legend>Paper type</legend>
-          <label class="radio"><input type="radio" name="kind" value="reading" checked> Reading (PASSAGE N)</label>
-          <label class="radio"><input type="radio" name="kind" value="listening"> Listening (PART N)</label>
-        </fieldset>
-        <div class="field">
-          <label for="r-threshold">Confidence needed to apply a fix: <output id="r-threshold-out">0.80</output></label>
-          <input id="r-threshold" name="threshold" type="range" min="0.6" max="0.95" step="0.05" value="0.8">
-          <small>Higher = fewer automatic fixes, more items left for review.</small>
-        </div>
-        <div class="actions">
-          <button type="submit" class="primary">Repair</button>
-          <button type="button" class="secondary" data-sample="broken_reading.docx" data-target="repair">Try a broken sample</button>
-        </div>
-      </form>
-      <div id="repair-result" class="result" aria-live="polite"></div>
+    <!-- ===================== Repair ===================== -->
+    <section class="page" data-page="/repair" aria-labelledby="repair-title" hidden>
+      <header class="page-header">
+        <p class="t-label" data-i18n="repair.eyebrow">IELTS · Structural repair</p>
+        <h1 id="repair-title" data-i18n="repair.title">Format Repair</h1>
+        <p class="t-lead" data-i18n="repair.lead">Repair structural formatting problems without changing the original wording.</p>
+      </header>
+      <div class="tool-layout">
+        <form class="tool-form" id="repair-form" novalidate>
+          <div class="field">
+            <span class="t-label" data-i18n="upload.fieldLabel">Document</span>
+            <div data-upload="repair"></div>
+          </div>
+          <fieldset class="field">
+            <legend class="field__legend t-label" data-i18n="doctype.label">Document type</legend>
+            <div class="segmented">
+              <label class="segmented__option"><input type="radio" name="kind" value="reading" checked>
+                <span class="segmented__dot" aria-hidden="true"></span><span class="segmented__title" data-i18n="doctype.reading">Reading</span>
+                <span class="segmented__hint" data-i18n="doctype.readingHint">Sections headed PASSAGE N</span></label>
+              <label class="segmented__option"><input type="radio" name="kind" value="listening">
+                <span class="segmented__dot" aria-hidden="true"></span><span class="segmented__title" data-i18n="doctype.listening">Listening</span>
+                <span class="segmented__hint" data-i18n="doctype.listeningHint">Sections headed PART N</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="field settings">
+            <legend class="visually-hidden" data-i18n="repair.settingsLabel">Repair settings</legend>
+            <div class="range">
+              <div class="range__head">
+                <label class="t-label" for="r-threshold" data-i18n="repair.confLabel">Automatic repair confidence</label>
+                <output class="range__value" id="r-threshold-out" for="r-threshold">0.80</output>
+              </div>
+              <input id="r-threshold" name="threshold" type="range" min="0.6" max="0.95" step="0.05" value="0.8"
+                     aria-describedby="r-threshold-explain">
+              <div class="range__ticks" aria-hidden="true"><span>0.60</span><span>0.70</span><span>0.80</span><span>0.90</span><span>0.95</span></div>
+              <div class="range__scale" aria-hidden="true"><span data-i18n="repair.scaleLow">More automatic</span><span data-i18n="repair.scaleHigh">More review</span></div>
+              <ul class="range__explain" id="r-threshold-explain">
+                <li data-i18n="repair.confHigh">Higher — fewer automatic changes, more items left for you to review.</li>
+                <li data-i18n="repair.confLow">Lower — more repairs applied automatically.</li>
+              </ul>
+            </div>
+          </fieldset>
+          <div class="tool-form__actions">
+            <button class="btn btn--primary" type="submit">
+              <svg class="icon btn__icon" aria-hidden="true"><use href="/static/icons.svg#i-wrench"/></svg>
+              <svg class="icon spinner" aria-hidden="true"><use href="/static/icons.svg#i-loader-circle"/></svg>
+              <span data-label="repair.submit" data-busy="repair.working" data-i18n="repair.submit">Repair document</span>
+            </button>
+          </div>
+        </form>
+        <aside class="aside" aria-labelledby="guarantee-title">
+          <div class="aside__block guarantee">
+            <h2 data-i18n="about.integrityTitle">Document integrity</h2>
+            <h3 id="guarantee-title" data-i18n="repair.guaranteeTitle">Wording is never changed</h3>
+            <p data-i18n="repair.guaranteeDesc">Only line breaks are inserted and Word numbering is turned into text. If a fix would change a single character of the wording, the repair is rejected.</p>
+          </div>
+          <div class="aside__note"><svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-lock"/></svg>
+            <p data-i18n="footer.privacy">Files are processed in memory and never stored.</p></div>
+        </aside>
+      </div>
+      <section class="results" id="repair-results" aria-live="polite" aria-labelledby="repair-results-label">
+        <h2 class="section-label t-label" id="repair-results-label" data-i18n="repair.title">Format Repair</h2>
+        <div data-results></div>
+      </section>
     </section>
 
-    <!-- Generators -->
-    <section data-page="/generate" hidden>
-      <h1>Generators</h1>
-      <div class="notice" id="ai-notice"></div>
-      <p>The generation engine is built and tested: educational planner, curriculum &amp; learning graph, student book
-        with terminology enforcement, teacher guide, visuals (SVG diagrams &amp; charts), assessments with balanced
-        versions, and IELTS Reading, Listening, Writing and Speaking. Each AI step is followed by deterministic checks;
-        drafts that fail are sent back and never used.</p>
-      <p>On this website these tools appear once the site owner adds an AI provider key in the hosting settings.
-        Until then they can be run from the command line — see the project README.</p>
+    <!-- ===================== Generators ===================== -->
+    <section class="page" data-page="/generate" aria-labelledby="gen-title" hidden>
+      <header class="page-header">
+        <p class="t-label" data-i18n="gen.eyebrow">Library</p>
+        <h1 id="gen-title" data-i18n="gen.title">Generators</h1>
+        <p class="t-lead" data-i18n="gen.lead">Every generator follows the same pattern: a structured plan, an AI draft, deterministic checks, and human approval.</p>
+      </header>
+      <div class="notice gen-notice" id="ai-notice" role="status">
+        <svg class="icon" aria-hidden="true"><use href="/static/icons.svg#i-info"/></svg>
+        <p data-i18n="gen.aiOff">AI generation is not enabled on this website yet.</p>
+      </div>
+      <div id="generator-library"></div>
     </section>
 
-    <!-- About -->
-    <section data-page="/about" hidden>
-      <h1>About Osamu Dazai</h1>
-      <p><strong>Osamu Dazai</strong> is an educational publishing engine created by
-        <a href="https://www.techrenacademy.com" target="_blank" rel="noopener noreferrer">TechRen Academy</a>.</p>
-      <h2>Privacy</h2>
-      <p>Uploaded files are processed in memory to produce the report and corrected document, then discarded. Nothing is
-        stored on the server.</p>
-      <p class="muted" id="version-line"></p>
+    <!-- ===================== About ===================== -->
+    <section class="page" data-page="/about" aria-labelledby="about-title" hidden>
+      <div class="about">
+        <nav class="toc" aria-labelledby="toc-label">
+          <p class="t-label" id="toc-label" data-i18n="about.tocLabel">On this page</p>
+          <ol>
+            <li><a href="#/about" data-section="why" data-i18n="about.whyTitle">Why Osamu Dazai</a></li>
+            <li><a href="#/about" data-section="how" data-i18n="about.howTitle">How it works</a></li>
+            <li><a href="#/about" data-section="integrity" data-i18n="about.integrityTitle">Document integrity</a></li>
+            <li><a href="#/about" data-section="privacy" data-i18n="about.privacyTitle">Privacy</a></li>
+            <li><a href="#/about" data-section="principles" data-i18n="about.principlesTitle">Technology principles</a></li>
+          </ol>
+        </nav>
+        <article class="article">
+          <header class="article__head">
+            <p class="t-label" data-i18n="about.eyebrow">About</p>
+            <h1 class="t-display" id="about-title" data-i18n="about.title">Educational material that parsers can trust.</h1>
+            <p class="t-lead" data-i18n="about.lead">Osamu Dazai is an educational publishing engine.</p>
+          </header>
+          <section id="about-why"><h2><span class="t-num">01</span><span data-i18n="about.whyTitle">Why Osamu Dazai</span></h2>
+            <p data-i18n="about.whyBody"></p></section>
+          <section id="about-how"><h2><span class="t-num">02</span><span data-i18n="about.howTitle">How it works</span></h2>
+            <ol class="how"><li data-i18n="about.how1"></li><li data-i18n="about.how2"></li><li data-i18n="about.how3"></li><li data-i18n="about.how4"></li></ol></section>
+          <section id="about-integrity"><h2><span class="t-num">03</span><span data-i18n="about.integrityTitle">Document integrity</span></h2>
+            <p data-i18n="about.integrityBody"></p></section>
+          <section id="about-privacy"><h2><span class="t-num">04</span><span data-i18n="about.privacyTitle">Privacy</span></h2>
+            <p data-i18n="about.privacyBody"></p></section>
+          <section id="about-principles"><h2><span class="t-num">05</span><span data-i18n="about.principlesTitle">Technology principles</span></h2>
+            <ul class="tenets"><li data-i18n="about.principle1"></li><li data-i18n="about.principle2"></li><li data-i18n="about.principle3"></li><li data-i18n="about.principle4"></li></ul>
+            <div class="credit">
+              <img class="brand__mark" src="/static/favicon.svg" alt="" width="28" height="28">
+              <p><span data-i18n="about.credit">Created by</span> <a href="https://www.techrenacademy.com" target="_blank" rel="noopener noreferrer">TechRen Academy</a></p>
+            </div>
+            <p class="t-meta" id="version-line"></p>
+          </section>
+        </article>
+      </div>
     </section>
   </main>
 
+  <!-- ===================== Footer ===================== -->
   <footer class="footer">
-    <span>Osamu Dazai · Created by
-      <a class="creator" href="https://www.techrenacademy.com" target="_blank" rel="noopener noreferrer">TechRen Academy</a></span>
-    <span class="muted">Files are processed in memory and never stored.</span>
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img class="brand__mark" src="/static/favicon.svg" alt="" width="22" height="22">
+        <span class="footer__name">Osamu Dazai</span>
+        <span class="footer__credit"><span data-i18n="footer.credit">Created by</span> <a href="https://www.techrenacademy.com" target="_blank" rel="noopener noreferrer">TechRen Academy</a></span>
+      </div>
+      <div class="footer__meta">
+        <span data-i18n="footer.privacy">Files are processed in memory and never stored.</span>
+        <span id="footer-version"></span>
+      </div>
+    </div>
   </footer>
-  <script src="/static/app.js" defer></script>
+
+  <script type="module" src="/static/js/app.js"></script>
 </body>
 </html>

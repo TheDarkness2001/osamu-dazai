@@ -72,6 +72,10 @@ class Guard(BaseHTTPMiddleware):
                     return JSONResponse({"detail": "Too many requests — please wait a minute."}, status_code=429)
                 q.append(now)
         response = await call_next(request)
+        if path.startswith("/static/fonts/") or path == "/static/icons.svg":
+            response.headers["Cache-Control"] = "public, max-age=604800"
+        elif path.startswith("/static/") or path == "/":
+            response.headers["Cache-Control"] = "no-cache"  # revalidate (ETag) so deploys show up immediately
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "same-origin"
         response.headers["X-Frame-Options"] = "DENY"
